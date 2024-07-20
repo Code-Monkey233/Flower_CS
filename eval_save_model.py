@@ -53,13 +53,13 @@ def main():
             result_per_dataset.append(result)
         
     
-        model.load_state_dict(torch.load('./flower/savedmodels/local' + str(i+1)+'.pt'))
+        model.load_state_dict(torch.load('./flower/savemodels/local' + str(i+1)+'.pt'))
         predictions, values = evaluate(model, testloaders[i], batch_size=1, n_features=nums_features[i])
         
         result  = format_predictions(predictions, values, X_tests[i], scalers[i])  #格式化预测结果
         result_per_dataset.append(result)
 
-        model.load_state_dict(torch.load('./flower/savedmodels/centralized.pt'))
+        model.load_state_dict(torch.load('./flower/savemodels/centralized.pt'))
         predictions, values = evaluate(model, testloaders[i], batch_size=1, n_features=nums_features[i])
         mean_difference = np.mean(values) - np.mean(predictions)
         predictions = [x + mean_difference for x in predictions]

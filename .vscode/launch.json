@@ -1,0 +1,14 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open DASHBOARD.html",
+            "file": "/Users/jiangyantao/学习内容课程/研一/每周组会/实验部分FL/quickstart-sklearn-tabular/EVCDP-FL/flower/evaluation/DASHBOARD.html"
+        }
+    ]
+}

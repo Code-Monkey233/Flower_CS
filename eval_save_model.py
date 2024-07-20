@@ -97,7 +97,7 @@ def plot_predictions(df_results):
             x=df_result[0].index,
             y=df_result[0].value,
             mode="lines",
-            name="Actual Number of Transfused Units",
+            name="Actual Amount of Occupancy",
             marker=dict(),
             text=df_result[0].index,
             line=dict(color="rgba(0,0,0, 0.3)"),
@@ -145,7 +145,7 @@ def plot_predictions(df_results):
         layout = dict(
             # title=dict(text = "Predictions vs Actual Values", font=dict(size=25)),
             xaxis=dict(title="Time", ticklen=50, zeroline=False),
-            yaxis=dict(title="Number of Transfused Units", ticklen=50, zeroline=False),
+            yaxis=dict(title="Amount of Ocuupancy", ticklen=50, zeroline=False),
             font=dict(
                 size=17,
             )

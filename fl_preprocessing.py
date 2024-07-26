@@ -17,7 +17,7 @@ def preprocessing(filepath:str):
     df_generated = generate_time_lags(df, 5)
     df_generated['Datetime']=[pd.to_datetime(x) for x in df_generated['Datetime']]
     df_generated.set_index('Datetime',inplace=True)
-    print(df_generated)
+    #print(df_generated)
     df_features = (df_generated
                .assign(day = df_generated.index.day)
                .assign(month = df_generated.index.month)

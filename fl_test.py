@@ -95,7 +95,7 @@ def format_predictions(predictions, values, df_test, scaler):
     df_result = df_result.sort_index()
     df_result = inverse_transform(scaler, df_result, [["value", "prediction"]])
     return df_result
-
+#trainloaders的数量与输入的数据条数严格一致
 trainloaders, testloaders, nums_examples, nums_features, X_tests, scalers = load_data(batch_size=BATCH_SIZE)
 
 def get_parameters(net) -> List[np.ndarray]:
@@ -163,7 +163,7 @@ class CustomStrategy(fl.server.strategy.FedAvg):
             # Save aggregated_ndarrays
             print(f"Saving round {server_round} aggregated_ndarrays...")
             np.savez(f"./flower/savemodels/round-{server_round}-weights.npz", *aggregated_ndarrays)
-
+            print(aggregated_ndarrays)
         return aggregated_parameters, aggregated_metrics
 
     def aggregate_evaluate(self, server_round, results, failures):

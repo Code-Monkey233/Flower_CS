@@ -55,7 +55,7 @@ class RNNModel(nn.Module):
 
 # LSTM Model
 class LSTMModel(nn.Module):
-    def __init__(self, input_dim = 6908, hidden_dim = 256, layer_dim = 3, output_dim = 1, dropout_prob = 0.2):
+    def __init__(self, input_dim = 6908, hidden_dim = 288, layer_dim = 3, output_dim = 1, dropout_prob = 0.2):
 
         super(LSTMModel, self).__init__()
 

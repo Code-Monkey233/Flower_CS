@@ -44,9 +44,10 @@ def load_data(batch_size: int):
         scalers.append(scaler)
     return train_loaders, test_loaders, nums_examples, nums_features, X_tests, scalers
 
-def train(net, train_loader, epochs):
+def train(net, train_loader, epochs, ):
     optimizer = torch.optim.Adam(net.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
     loss_fn = torch.nn.MSELoss(reduction='mean')
+    train_epoch_loss = []
 
     def train_step(x, y):
         net.train()
@@ -57,11 +58,13 @@ def train(net, train_loader, epochs):
         optimizer.zero_grad()
         return loss.item()
     
-    for _ in range(epochs):
+    for epoch in range(epochs):
         for x_batch, y_batch in train_loader:
             x_batch = x_batch.view([BATCH_SIZE, -1, N_FEATURES]).to(DEVICE)
             y_batch = y_batch.to(DEVICE)
             loss = train_step(x_batch, y_batch)
+        train_epoch_loss.append(loss)
+    return train_epoch_loss
 
 def test(net, testloader, X_test, scaler):
     loss = 0
@@ -117,15 +120,15 @@ class Client(fl.client.NumPyClient):
         self.X_test = X_test
         self.scaler = scaler
     
-    def get_parameters(self, config):
+    def get_parameters(self, config): #返回自身网络的参数
         print(f"[Client {self.cid}] get_parameters")
         return get_parameters(self.net)
 
     def fit(self, parameters, config):
         print(f"[Client {self.cid}] fit, config: {config}")
-        set_parameters(self.net, parameters)
-        train(self.net, self.trainloader, epochs=EPOCH)
-        return self.get_parameters(config={}), self.num_examples["trainset"], {}
+        set_parameters(self.net, parameters)  #设定网络的参数
+        train(self.net, self.trainloader, epochs=EPOCH)   #训练网络
+        return self.get_parameters(config={}), self.num_examples["trainset"], {}  
 
     def evaluate(self, parameters, config):
         print(f"[Client {self.cid}] evaluate, config: {config}")
@@ -143,14 +146,14 @@ def client_fn(cid) -> Client:  #client fn需要定义训练模型使用的网络
     num_features = nums_features[int(cid)]   #特征数
     X_test = X_tests[int(cid)]   #from load_data
     scaler = scalers[int(cid)]   #from load_data
-    #返回值是flower定义好的client类
+    #返回值是flower定义好的client类：包含客户端代码、神经网络模型、数据集
     return Client(cid, net, trainloader, testloader, num_examples, num_features, X_test, scaler).to_client()  #return CLient Class
 
 client_resources = None#{"num_cpus": 2, "num_gpus": 0.0}
 if DEVICE.type == "cuda":   
   client_resources = {"num_gpus": 1}
 
-# FedAVG/FedProx algorithm
+# FedAVG/FedProx algorithm  涉及到aggregate_fit、aggregate_eval、返回值是聚合损失和损失值RMSE
 class CustomStrategy(fl.server.strategy.FedAvg):
     def aggregate_fit(self, server_round, results, failures):
 

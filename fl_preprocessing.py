@@ -45,7 +45,7 @@ def preprocessing(filepath:str):
             }
             return scalers.get(scaler.lower())()
     scaler = get_scaler('minmax')
-    X_train_arr = scaler.fit_transform(X_train)
+    X_train_arr = scaler.fit_transform(X_train) #fit和transform结合
     X_test_arr = scaler.transform(X_test)
 
     y_train_arr = scaler.fit_transform(y_train)
